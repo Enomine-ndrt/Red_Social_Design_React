@@ -51,8 +51,7 @@ export default function Login() {
                        <button className="loginRegisterButton">
                        {isFetching 
                        ?<CircularProgress color="inherit" size="20px"/>
-                       : "Create a new account"}
-                           
+                       : "Create a new account"}                           
                            </button>
                     </form>
                 </div>
