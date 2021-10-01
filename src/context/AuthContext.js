@@ -2,7 +2,16 @@ import {createContext,useReducer} from 'react';
 import AuthReducer from './AuthReducer';
 
 const INITIAL_STATE = {
-    user:null,
+    user:{
+        _id:"6152a017b81c71d4b856dfa3",
+        username:"juan",
+        email:"juan@gmail.com",
+        profilePicture:"person/1.jpeg",
+        coverPicture:"",
+        isAdmin:false,
+        followers:[],
+        followings:[]
+    },
     isFetching:false,
     error:false
 };
