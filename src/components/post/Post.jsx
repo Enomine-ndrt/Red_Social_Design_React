@@ -41,6 +41,7 @@ export default function Post({post}) {
                 <div className="postTop">
                     <div className="postTopLeft">
                         <Link to={`profile/${user.username}`}>
+                            {console.log(user)}
                         <img 
                         className="postProfileImg" 
                         src= {user.profilePicture  ? PF+user.profilePicture : PF+"person/noAvatar.png"} 
