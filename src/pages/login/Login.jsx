@@ -7,7 +7,7 @@ import { CircularProgress } from '@mui/material';
 export default function Login() {
     const email= useRef();
     const password= useRef();
-    const {user,isFetching,error,dispatch} = useContext(AuthContext);
+    const {isFetching,dispatch} = useContext(AuthContext);
 
     const handleClick = (e)=>{
         e.preventDefault();
@@ -15,7 +15,6 @@ export default function Login() {
             {email:email.current.value,password:password.current.value},
             dispatch);
     }
-    console.log(user);
     
     return (
         <div className="login">
@@ -50,8 +49,11 @@ export default function Login() {
                        <span className="loginForgot">Forgot password?</span>
                        <button className="loginRegisterButton">
                        {isFetching 
-                       ?<CircularProgress color="inherit" size="20px"/>
-                       : "Create a new account"}                           
+                       ?(
+                       <CircularProgress color="inherit" size="20px"/>
+                       ):( 
+                           "Create a new account"
+                       )}                           
                            </button>
                     </form>
                 </div>

@@ -1,17 +1,24 @@
 import "./topbar.css";
 import {Person,Search,Chat,Notifications} from '@mui/icons-material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import {Link} from 'react-router-dom';
 import {useContext} from 'react';
 import {AuthContext} from'../../context/AuthContext'; 
+
 
 export default function Topbar() {
     const {user} = useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
+    const ExitSession = ()=>{
+        localStorage.clear();
+        window.location.reload();
+    };
+
     return (
         <div className="topbarContainer">
            <div className="topbarLeft">
-               <Link to={'/'} style={{ textDecoration: "none" }}>
+               <Link to={'/'} style={{ textDecoration: "none" }}>  
                <span className="logo">NKTSocial</span>
                </Link>
            </div>
@@ -23,6 +30,9 @@ export default function Topbar() {
            </div>
            <div className="topbarRight">
                <div className="topbarLinks">
+              
+                   
+              
                    <span className="topbarLink">Homepage</span>
                    <span className="topbarLink">Timeline</span>
                </div>
@@ -39,6 +49,11 @@ export default function Topbar() {
                         <Notifications/>
                         <span className="topbarIconBadge">1</span>
                     </div>
+                    <div className="topbarIconItem">
+                    <span onClick={ExitSession} className="topbarLink"><ExitToAppIcon/></span>
+                        
+                    </div>
+
                 </div>
                 <Link to={`/profile/${user.username}`}>
                 <img src={
