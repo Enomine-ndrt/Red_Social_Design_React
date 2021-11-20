@@ -73,6 +73,7 @@
     flex-direction: column;
     margin-bottom: 20px;
     cursor: pointer;
+    align-items: center;
   }
   
   .rightbarFollowingImg{
@@ -81,6 +82,8 @@
     object-fit: cover;
     border-radius: 5px;
   }
+
+  
   .rightbarFollowButton{
     margin-top: 30px;
     margin-bottom:10px;

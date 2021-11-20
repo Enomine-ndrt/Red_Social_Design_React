@@ -3,10 +3,13 @@ import Topbar from '../../components/topbar/Topbar';
 import Conversation from '../../components/conversations/Conversation';
 import Message from '../../components/message/Message';
 import ChatOnline from '../../components/chatOnline/ChatOnline';
+//import CheckOnline from '../../components/checkOnline/CheckOnline';
+//import ConexionUser from './ConexionUser'
 import {useContext,useEffect,useState,useRef} from 'react';
 import {AuthContext} from '../../context/AuthContext';
+import {SocketContext} from '../../context/socket';
 import axios from 'axios';
-import {io} from 'socket.io-client';
+//import {io} from 'socket.io-client';
 
 export default function Messenger() {
     const [conversations,setConversations] = useState([]);
@@ -16,20 +19,23 @@ export default function Messenger() {
     const [arrivalMessage,setArrivalMessage] = useState(null);
     const [onlineUsers,setOnlineUsers] = useState([]);
 
-    const socket = useRef();
+     //const socket = useRef();
+   //const socket = ConexionUser();
+  
     const {user} = useContext(AuthContext);
+    const socket = useContext(SocketContext);
     const scrollRef = useRef(); 
 
     useEffect(() => {
-         socket.current = io("ws://localhost:8900");
-         socket.current.on("getMessage",data=>{
+        // socket.current = io("ws://localhost:8900");
+         socket.on("getMessage",data=>{
             setArrivalMessage({
                 sender: data.senderId,
                 text: data.text,
                 createdAt: Date.now()
             });
         });
-    },[]);
+    },[socket]);
 
     useEffect(() => {
         arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) && 
@@ -37,9 +43,10 @@ export default function Messenger() {
     },[arrivalMessage,currentChat]);
 
     useEffect(() => {
-        socket.current.emit("addUser",user._id);
-        socket.current.on("getUsers",users=>{
-            setOnlineUsers(user.followings.filter((f)=>users.some((u)=>u.userId === f )))
+        socket.emit("addUser",user._id);
+        socket.on("getUsers",users=>{
+            setOnlineUsers(user.followings.filter((f)=>users.some((u)=>u.userId === f ))
+            );
         });
     },
     [user]);
@@ -51,8 +58,7 @@ export default function Messenger() {
                 setConversations(res.data);
             }catch(err){
                 console.log(err);
-            }
-            
+            }            
         };
         getConversations();
     },[user._id]);
@@ -74,12 +80,12 @@ export default function Messenger() {
         const message ={
             sender: user._id,
             text:newMessage,
-            conversationId:currentChat._id
+            conversationId:currentChat._id,
         };
 
-        const receiverId = currentChat.members.find(member=>member !== user._id);
+        const receiverId = currentChat.members.find((member)=>member !== user._id);
 
-            socket.current.emit("sendMessage",{
+            socket.emit("sendMessage",{
                 senderId: user._id,
                 receiverId,
                 text:newMessage,
@@ -93,12 +99,6 @@ export default function Messenger() {
             console.log(err);
         }
    };
-
-   useEffect(() => {
-        socket.current.on("getMessage",data=>{
-
-        });
-   },[]);
 
    useEffect(() => {
         scrollRef.current?.scrollIntoView({behavior:"smooth"});
@@ -147,14 +147,18 @@ export default function Messenger() {
             </div>
             <div className="chatOnline">
                 <div className="chatOnlineWrapper">
+{                    
                        <ChatOnline 
                        onlineUsers={onlineUsers} 
                        currentId={user._id} 
                        setCurrentChat={setCurrentChat}
                        />
+                       
+                   //   <CheckOnline/>
+}
                 </div>
             </div>
         </div>
         </>
-    )
+    );
 }

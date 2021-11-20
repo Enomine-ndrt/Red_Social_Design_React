@@ -16,6 +16,6 @@ export const Follow = (userId)=>({
     payload:userId,
 });
 export const Unfollow = (userId)=>({
-    type: "UNFollow",
+    type: "Unfollow",
     payload:userId,
 });

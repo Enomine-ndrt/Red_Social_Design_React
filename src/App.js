@@ -3,8 +3,10 @@ import Profile from './pages/profile/Profile';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Messenger from './pages/messenger/Messenger';
+import Config from './pages/config/Config';
 import { useContext } from 'react';
 import {AuthContext} from './context/AuthContext';
+import {socket,SocketContext} from './context/socket';
 
 import {
   BrowserRouter as Router,
@@ -19,6 +21,7 @@ const {user} = useContext(AuthContext);
   return (
     <Router>
       <Switch>
+      <SocketContext.Provider  value={socket}> 
         <Route exact path="/">
             {user ? <Home/>:<Register/>}
         </Route>
@@ -31,9 +34,13 @@ const {user} = useContext(AuthContext);
         <Route path="/messenger">
         { !user  ? <Redirect to="/"/> : <Messenger/> }
         </Route>
+        <Route path="/config/:username">
+         <Config/> 
+        </Route>
         <Route path="/profile/:username">
             <Profile/>
         </Route>
+        </SocketContext.Provider> 
       </Switch>
     </Router>
   );

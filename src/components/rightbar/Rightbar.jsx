@@ -1,20 +1,21 @@
 import "./rightbar.css";
 import {Users} from "../../dummyData";
 import Online from "../online/Online";
+import ChatOnline from '../../components/chatOnline/ChatOnline';
 import {useContext,useEffect,useState} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../../context/AuthContext';
 import {Add,Remove} from '@mui/icons-material';
-
+import CheckOnline from '../checkOnline/CheckOnline';
 
 export default function Rightbar({user}) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends,setFriends] = useState([]);
   const {user:currentUser,dispatch} = useContext(AuthContext);
   const [followed,setFollowed] = useState(currentUser.followings.includes(user?.id));
-
-  
+ 
+ 
   useEffect(() => {
     const getFriends = async()=>{
         try{
@@ -58,9 +59,15 @@ export default function Rightbar({user}) {
                 <img className="rightbarAd" src="/assets/ad.png" alt="" />
                 <h4 className="rightbarTitle">Online Friends</h4>
                 <ul className="rightbarFriendList">
-                    {Users.map(u=>(
+                    {
+                /*    Users.map(u=>(
                         <Online key={u.id} user={u}/>
-                    ))}
+                    ))
+                   */
+              <CheckOnline/>
+
+                    }
+                
                 </ul>
             </>
         );
@@ -71,7 +78,7 @@ export default function Rightbar({user}) {
             <>
             {user.username !== currentUser.username && (
               <button className="rightbarFollowButton" onClick={handlerClick}>
-               {followed ? "unfollow" : "Follow"} 
+               {followed ? "Unfollow" : "Follow"} 
                {followed ? <Remove/> : <Add/>} 
               
               </button>
@@ -98,8 +105,8 @@ export default function Rightbar({user}) {
         </div>
         <h4 className="rightbarTitle">User friends</h4>
         <div className="rightbarFollowings">
-            {friends.map(friend=>(
-              <Link to= {`/profile/${friend.username}`} style={{ textDecoration:"none" }}>         
+            {friends.map((friend)=>(
+              <Link to= {`/profile/${friend.username}`} style={{ textDecoration:"none", color:"#000" }}>         
           <div className="rightbarFollowing">
             <img
               src={friend.profilePicture 

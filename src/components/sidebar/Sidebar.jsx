@@ -11,10 +11,15 @@ import {
     School,
 } 
 from '@mui/icons-material';
+import {Link} from 'react-router-dom';
+import SettingsIcon from '@mui/icons-material/Settings';
 import {Users} from "../../dummyData";
 import CloseFriend from "../closeFriends/CloseFriend";
+import {useContext} from 'react';
+import {AuthContext} from'../../context/AuthContext'; 
 
 export default function Sidebar() {
+      const {user} = useContext(AuthContext);
     return (
         <div className="sidebar">
            <div className="sidebarWrapper">
@@ -24,8 +29,10 @@ export default function Sidebar() {
                         <span className="sidebarListItemText">Feed</span>
                   </li>
                   <li className="sidebarListItem">
+                        <Link to="/messenger"  style={{ textDecoration: "none" ,color: "#000" }}>
                         <Chat className="sidebarIcon"/>
                         <span className="sidebarListItemText">Chats</span>
+                        </Link>
                   </li>
                   <li className="sidebarListItem">
                         <PlayCircleFilledOutlined className="sidebarIcon"/>
@@ -52,8 +59,10 @@ export default function Sidebar() {
                         <span className="sidebarListItemText">Events</span>
                   </li>
                   <li className="sidebarListItem">
-                        <School className="sidebarIcon"/>
-                        <span className="sidebarListItemText">Courses</span>
+                        <Link to={`/config/${user.username}`} style={{ textDecoration: "none",color: "#000" }}>
+                        <SettingsIcon className="sidebarIcon" />
+                        <span className="sidebarListItemText">Settings account</span>
+                        </Link>
                   </li>
               </ul>
                 <button className="sidebarButton">Show more</button>
