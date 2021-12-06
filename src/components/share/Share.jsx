@@ -3,12 +3,15 @@ import {PermMedia,Label,Room,EmojiEmotions,Cancel} from '@mui/icons-material';
 import {useContext,useRef,useState} from 'react';
 import {AuthContext} from '../../context/AuthContext';
 import axios from 'axios';
+import {app} from '../../fb';
 
 export default function Share() {
     const {user} = useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const desc = useRef();
     const [file,setFile] = useState(null);
+    const [archivoUrl,setArchivoUrl] = useState("");
+    const [docus,setDocus] = useState([]);
 
     const submitHandler = async(e)=>{
         e.preventDefault();
@@ -23,12 +26,20 @@ export default function Share() {
             data.append("name",fileName);
             data.append("file",file);
             newPost.img = fileName;
-            console.log(newPost);
+            //console.log(newPost);            
+    const storageRef = app.storage().ref(`/posts/`);
+    const archivoPath =  storageRef.child(fileName);
+    await archivoPath.put(file);
+    console.log("archivo cargado ",file.name);
+    const enlaceUrl =  await archivoPath.getDownloadURL();
+    setArchivoUrl(enlaceUrl);
+            /*
             try{
                 await axios.post("/upload",data);
             }catch(err){
                 console.log("Error upload "+err);
             }
+            */
         }
 
         try{

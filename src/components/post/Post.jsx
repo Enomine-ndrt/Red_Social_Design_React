@@ -6,6 +6,7 @@ import axios from 'axios';
 import {format} from 'timeago.js';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../../context/AuthContext';
+import {app} from '../../fb';
 
 export default function Post({post}) {
 
@@ -14,6 +15,21 @@ export default function Post({post}) {
     const [user,setUser] = useState({});
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const {user:currentUser} = useContext(AuthContext);
+    const [archivoUrl,setArchivoUrl] = useState("");
+  
+    
+
+    //var pathReference = storage.ref('posts/');
+    // Create a reference from a Google Cloud Storage URI
+    //var gsReference = storage.refFromURL(`gs://my-proyecto-d849d.appspot.com/posts/`)
+
+
+    useEffect(async()=>{
+        var storage = app.storage().ref('posts/')
+        const archivoPath =  storage.child(post.img)
+        const enlaceUrl = await archivoPath.getDownloadURL();
+        setArchivoUrl(enlaceUrl)
+    },[]);
 
     useEffect(()=>{
         setIsLiked(post.likes.includes(currentUser._id));
@@ -58,7 +74,12 @@ export default function Post({post}) {
                 </div>
                 <div className="postCenter">
                     <span className="postText">{post?.desc}</span>
-                    <img className="postImg" src={PF+post.img} alt="" />
+                    
+                    <img className="postImg" src={
+                        `${archivoUrl}/${post.img}`
+                        }
+                         alt="" />
+                    
                 </div>
                 <div className="postBottom">
                     <div className="postBottomLeft">

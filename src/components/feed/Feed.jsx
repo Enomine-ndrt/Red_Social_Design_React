@@ -5,6 +5,8 @@ import Post from '../../components/post/Post';
 import {useContext,useState,useEffect} from 'react';
 import axios from 'axios';
 import {AuthContext} from '../../context/AuthContext';
+import {app} from '../../fb';
+
 
 export default function Feed({username}) {
     const [posts,setPosts] = useState([]);
